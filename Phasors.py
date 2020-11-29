@@ -8,6 +8,11 @@ class Zee:
             self.r = 0; self.phi = 0; self.z = (0,0)
             
         elif len(args) == 1:
+            if (isinstance(args[0], int)) or (isinstance(args[0], float)):
+                self.x = args[0].real; self.y = 0
+                self.r = args[0]; self.phi = 0; self.z = (self.r,0)
+                
+                
             if isinstance(args[0], complex):
                 self.x = args[0].real; self.y = args[0].imag
                 self.r = 0; self.phi = 0; self.z = (0,0)
@@ -86,7 +91,7 @@ class Zee:
         temp.to_polar()
         return temp
     
-    def parallel(self, other):
+    def __floordiv__(self, other):
         temp1 = Zee()
         temp1.r = self.r * other.r 
         temp1.phi = self.phi + other.phi
@@ -104,6 +109,15 @@ class Zee:
         temp.z = (temp.r, temp.phi)
         temp.to_rect()
         return temp
+
+    def summary(value):
+        if (value.r < 0):
+            value.r *= -1
+            value.phi += 180
+            if value.phi > 360:
+                value.phi -= 360
+        print(f"x:{value.x:.3} y:{value.y:.3} r:{value.r:.3} phi:{value.phi:.3}")
+
         
 if __name__ == '__main__':
     f = Zee()
