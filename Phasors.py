@@ -1,6 +1,6 @@
 import math
 
-class Zee:
+class Zee(object):
 
     def __init__(self, *args):
         if len(args) == 0:
@@ -35,11 +35,11 @@ class Zee:
         self.z = (self.r, self.phi)
 
     @property
-    def ph(self):
+    def polar(self):
         return (self.r, self.phi)
 
-    @ph.setter
-    def ph(self, value):
+    @polar.setter
+    def polar(self, value):
         if isinstance(value, tuple):
             self.z=value
             self.to_rect()
@@ -110,27 +110,77 @@ class Zee:
         temp.to_rect()
         return temp
 
-    def summary(value):
-        if (value.r < 0):
-            value.r *= -1
-            value.phi += 180
-            if value.phi > 360:
-                value.phi -= 360
-        print(f"x:{value.x:.3} y:{value.y:.3} r:{value.r:.3} phi:{value.phi:.3}")
+    def __str__(self):
+        if (self.r < 0):
+            self.r *= -1
+            self.phi += 180.0
+        while self.phi > 360.0:
+            self.phi -= 360.0
+        while self.phi < -360.0:
+            self.phi += 360.0
+        self.x = float(self.x)
+        self.y = float(self.y)
+        self.r = float(self.r)
+        self.phi=float(self.phi)
+        return (f"x:{self.x:.5} y:{self.y:.5} r:{self.r:.5} phi:{self.phi:.5}")
 
         
-if __name__ == '__main__':
-    f = Zee()
-    f.rect = (11+9.5j)
-    print(round(f.x,4), round(f.y,4), round(f.r,4), round(f.phi,4))
+class Resistor(Zee):
+    def __init__(self, *args):
+        Zee.__init__(self, *args)
 
-    print("-------------------")
-    g = Zee()
-    g.ph=(f.r, f.phi)
-    print(round(g.x,4), round(g.y,4), round(g.r,4), round(g.phi,4))
+    @property
+    def resistance(self):
+        return self.x
     
-    c = Zee(12,51) / Zee(3,-9)
-    print(c.x, c.y, c.r, c.phi, c.z)
+    @resistance.setter
+    def resistance(self, value):
+        if isinstance(value, int) or isinstance(value, float):
+            if value >= 0:
+                self.x = self.r = value
+                self.y = self.phi = 0
     
+    @property
+    def impedance(self):
+        return self.x
     
+    @impedance.setter
+    def impedance(self, value):
+        if isinstance(value, int) or isinstance(value, float):
+            if value >= 0:
+                self.x = self.r = value
+                self.y = self.phi = 0
+
+class Inductor(Zee):
     
+    def __init__(self):
+        Zee.__init__(self)
+        
+    
+    @property
+    def impedance(self):
+        return (0+self.y*1j)
+    
+    @impedance.setter
+    def impedance(self, *args):
+        self.x = 0
+        self.y = args[0][0]*args[0][1]
+        self.r = self.y
+        self.phi = 90.0
+    
+class Capacitor(Zee):
+    
+    def __init__(self):
+        Zee.__init__(self)
+        
+    
+    @property
+    def impedance(self):
+        return (0-self.y*1j)
+    
+    @impedance.setter
+    def impedance(self, *args):
+        self.x = 0
+        self.y = 1/(args[0][0]*args[0][1])
+        self.r = self.y
+        self.phi = -90.0
