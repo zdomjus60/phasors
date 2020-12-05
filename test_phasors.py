@@ -1,4 +1,4 @@
-from Phasors import Zee
+from Phasors import *
 import math
 
 
@@ -67,8 +67,49 @@ import math
 #summary(Zx)
 
 #Esempio 10.1
-V = Zee(20,0)
-R1 = Zee(10)
-H1 = Zee(4j)
-H2 = Zee(2j)
-C1 = Zee(-2.5j)
+#V = Zee(20,0)
+#R1 = Zee(10)
+#H1 = Zee(4j)
+#H2 = Zee(2j)
+#C1 = Zee(-2.5j)
+
+#i1 = Zee(1)/Zee(12+2j)
+#print("I1: ", i1)
+#v0 = Zee(-1)*i1 * Zee(8+4j)
+#print("v0: ", v0)
+#isum = Zee(0.2)*v0
+#print("isum: ", isum)
+#i2 = i1 - isum
+#print("i2: ", i2)
+#req = Zee(1)/i2
+#print("req: ", req)
+#ia = Zee(-32+16j)/Zee(12+2j)
+#print("ia: ", ia)
+#ib = Zee(8)+ia
+#print("ib: ", ib)
+#vth = ib*Zee(4-2j)+ia*Zee(8+4j)
+#print("vth: ", vth)
+
+#p1 = Zee(1,0)/(Zee(10000-2500j))
+#print(p1)
+#p2 = Zee(1)/(Zee(-5000j))
+#print(p2)
+#p3 = Zee(1)/Zee(10000)
+#print(p3)
+#v0 = p1/(p2-p3)
+#print(v0)
+
+# test rlc
+r= Resistor(5)
+i = Inductor(2)
+c = Capacitor(2e-03)
+
+zr = r.impedance(10)
+zi = i.impedance(10)
+zc = c.impedance(10)
+
+print(zr)
+print(zi)
+print(zc)
+
+print(zr, zi, zc)

@@ -53,6 +53,13 @@ class Zee(object):
         if isinstance(value, complex):
             self.x = value.real; self.y = value.imag
             self.to_polar()
+            
+    def __neg__(self):
+        temp = Zee()
+        temp.x = -self.x
+        temp.y = -self.y
+        temp.to_polar()
+        return temp
 
     def __add__(self, other):
         temp = Zee()
@@ -126,61 +133,67 @@ class Zee(object):
 
         
 class Resistor(Zee):
-    def __init__(self, *args):
-        Zee.__init__(self, *args)
-
+    def __init__(self, res):
+        Zee.__init__(self)
+        self.res = res
+          
     @property
     def resistance(self):
-        return self.x
+        return self.res
     
     @resistance.setter
     def resistance(self, value):
         if isinstance(value, int) or isinstance(value, float):
             if value >= 0:
-                self.x = self.r = value
-                self.y = self.phi = 0
+                self.res = value
     
-    @property
-    def impedance(self):
-        return self.x
-    
-    @impedance.setter
-    def impedance(self, value):
-        if isinstance(value, int) or isinstance(value, float):
-            if value >= 0:
-                self.x = self.r = value
-                self.y = self.phi = 0
+    def impedance(self, pulse):
+        self.x = self.r = self.res
+        self.y = self.phi = 0
+        return(self)
 
 class Inductor(Zee):
     
-    def __init__(self):
+    def __init__(self, ind):
         Zee.__init__(self)
+        self.ind = ind
         
-    
     @property
-    def impedance(self):
-        return (0+self.y*1j)
+    def inductance(self):
+        return self.ind
     
-    @impedance.setter
-    def impedance(self, *args):
+    @inductance.setter
+    def inductance(self, value):
+        if isinstance(value, int) or isinstance(value, float):
+            if value >= 0:
+                self.ind = value
+
+    def impedance(self, pulse):
         self.x = 0
-        self.y = args[0][0]*args[0][1]
-        self.r = self.y
-        self.phi = 90.0
-    
+        self.y = self.r = pulse * self.ind
+        self.phi = 90
+        return(self)
+        
 class Capacitor(Zee):
     
-    def __init__(self):
+    def __init__(self, cap):
         Zee.__init__(self)
+        self.cap = cap
         
-    
     @property
-    def impedance(self):
-        return (0-self.y*1j)
+    def capacitance(self):
+        return self.cap
     
-    @impedance.setter
-    def impedance(self, *args):
+    @capacitance.setter
+    def capacitance(self, value):
+        if isinstance(value, int) or isinstance(value, float):
+            if value >= 0:
+                self.cap = value
+        
+    def impedance(self, pulse):
         self.x = 0
-        self.y = 1/(args[0][0]*args[0][1])
-        self.r = self.y
-        self.phi = -90.0
+        self.y = -1/pulse/self.cap
+        self.r = 1/pulse/self.cap
+        self.phi = -90
+        return(self)
+
