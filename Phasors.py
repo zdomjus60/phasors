@@ -33,6 +33,14 @@ class Zee(object):
         self.r = math.sqrt(self.x*self.x + self.y*self.y) 
         self.phi = math.degrees(math.atan2(self.y, self.x))
         self.z = (self.r, self.phi)
+    
+    def conjugate(self):
+        temp = Zee()
+        temp.phi = -self.phi
+        temp.r = self.r
+        temp.z = (temp.r, temp.phi)
+        temp.to_rect()
+        return temp
 
     @property
     def polar(self):

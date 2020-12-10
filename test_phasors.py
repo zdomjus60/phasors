@@ -100,16 +100,76 @@ import math
 #print(v0)
 
 # test rlc
-r= Resistor(5)
-i = Inductor(2)
-c = Capacitor(2e-03)
+# r= Resistor(5)
+# i = Inductor(2)
+# c = Capacitor(2e-03)
+# 
+# zr = r.impedance(10)
+# zi = i.impedance(10)
+# zc = c.impedance(10)
+# 
+# print(zr)
+# print(zi)
+# print(zc)
+# 
+# print(zr, zi, zc)
 
-zr = r.impedance(10)
-zi = i.impedance(10)
-zc = c.impedance(10)
+# Practice problem 11.10
+# Zth = Zee(8-6j)//Zee(4j)+Zee(10)
+# print(Zth)
+# pf = math.cos(math.radians(Zth.phi))
+# print(pf)
+# ap = Zee(165,0)*Zee(165,0)/Zth
+# print(ap)
 
-print(zr)
-print(zi)
-print(zc)
+# Practice problem 11.11
 
-print(zr, zi, zc)
+#Vrms= Zee(110,85)
+#Irms= Zee(0.4,-15)
+#cp = Vrms*Irms
+#print(f"complex power: {cp} VA")
+#ap = cp.r
+#print(f"apparent power: {ap} VA")
+#print(f"real power: {cp.x} W")
+#print(f"reactive power: {cp.y} VAR")
+#pf = math.cos(math.radians(cp.phi))
+#print(f"power factor: {pf}")
+#Irms=Zee(0.4,15)
+#lz = Vrms/Irms
+#print(f"load impedance: {lz} Ohms")
+# Esempio 11.13
+#v = Zee(220,0)
+#ztot = Zee(19-8j)
+#i = v/ztot
+#print(f"intensità : {i}")
+#vline = v*Zee(4+2j)/ztot
+#print(f"vline : {vline}")
+#vload = v*Zee(15-10j)/ztot
+#print(f"vload : {vload}")
+#iconj = i.conjugate()
+#pline = vline * iconj
+#print(f"pline : {pline}")
+#pload = vload * iconj
+#print(f"pload : {pload}")
+#psource = v * iconj
+#print(f"psource : {psource}")
+
+# Practice Problem 11.13
+i2 = Zee(2)
+v1 = i2 * Zee(60+20j)
+print(f"v1 : {v1}")
+i1 = v1/Zee(30-10j)
+print(f"i1 : {i1}")
+itot = i1+i2
+print(f"itot : {itot}")
+p2 = v1*i2.conjugate()
+print(f"p2 : {p2}")
+p1 = v1*i1.conjugate()
+print(f"p1 : {p1}")
+v = v1 + itot*Zee(20)
+print(f"v : {v}")
+p0 = (v - v1) * itot.conjugate()
+print(f"p0 : {p0}")
+ptot = p0 + p1 + p2
+print(f"ptot : {ptot}")
+       
