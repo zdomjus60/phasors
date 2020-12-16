@@ -12,7 +12,6 @@ class Zee(object):
                 self.x = args[0].real; self.y = 0
                 self.r = args[0]; self.phi = 0; self.z = (self.r,0)
                 
-                
             if isinstance(args[0], complex):
                 self.x = args[0].real; self.y = args[0].imag
                 self.r = 0; self.phi = 0; self.z = (0,0)
@@ -97,6 +96,12 @@ class Zee(object):
         temp.phi = self.phi - other.phi
         temp.z = (temp.r, temp.phi)
         temp.to_rect()
+        return temp
+
+    def __pow__(self, other):
+        a = (self.x+self.y*1j)**(other.x+other.y*1j)
+        temp = Zee(a)
+        temp.to_polar()
         return temp
     
     def series(self, other):
@@ -205,3 +210,25 @@ class Capacitor(Zee):
         self.phi = -90
         return(self)
 
+class VSource(Zee):
+    
+    def __init__(self, voltage, frequency=50.0, phase=0):
+        Zee.__init__(self)
+        self.r = voltage
+        self.phi = phase
+        self.x = Zee(self.r, self.phi).x
+        self.y = Zee(self.r, self.phi).y
+        self.frequency = frequency
+        self.pulse = self.frequency*2*math.pi
+    
+class ISource(Zee):
+    
+    def __init__(self, current, frequency=50.0, phase=0):
+        Zee.__init__(self)
+        self.r = current
+        self.phi = phase
+        self.x = Zee(self.r, self.phi).x
+        self.y = Zee(self.r, self.phi).y
+        self.frequency = frequency
+        self.pulse = self.frequency*2*math.pi
+ 

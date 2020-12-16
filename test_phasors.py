@@ -155,21 +155,52 @@ import math
 #print(f"psource : {psource}")
 
 # Practice Problem 11.13
-i2 = Zee(2)
-v1 = i2 * Zee(60+20j)
-print(f"v1 : {v1}")
-i1 = v1/Zee(30-10j)
-print(f"i1 : {i1}")
-itot = i1+i2
-print(f"itot : {itot}")
-p2 = v1*i2.conjugate()
-print(f"p2 : {p2}")
-p1 = v1*i1.conjugate()
-print(f"p1 : {p1}")
-v = v1 + itot*Zee(20)
-print(f"v : {v}")
-p0 = (v - v1) * itot.conjugate()
-print(f"p0 : {p0}")
-ptot = p0 + p1 + p2
-print(f"ptot : {ptot}")
-       
+#i2 = Zee(2)
+#v1 = i2 * Zee(60+20j)
+#print(f"v1 : {v1}")
+#i1 = v1/Zee(30-10j)
+#print(f"i1 : {i1}")
+#itot = i1+i2
+#print(f"itot : {itot}")
+#p2 = v1*i2.conjugate()
+#print(f"p2 : {p2}")
+#p1 = v1*i1.conjugate()
+#print(f"p1 : {p1}")
+#v = v1 + itot*Zee(20)
+#print(f"v : {v}")
+#p0 = (v - v1) * itot.conjugate()
+#print(f"p0 : {p0}")
+#ptot = p0 + p1 + p2
+#print(f"ptot : {ptot}")
+
+# Practice Problem 11.3
+#Z = Zee(3+1j)
+#V = Zee(320,45)
+#I = V/Z
+#P = 1/2*V.r*I.r*math.cos(math.radians(V.phi-I.phi))
+#print(P)
+
+# esempio nostro
+#V = Zee(12,0)
+#Z = Zee(4+2j)
+#I = V/Z
+#print(I)
+#P = V*V/Z.conjugate()
+#print(P)
+
+#Practice Problem 11.15
+#pf = 0.85
+#phi = math.degrees(math.acos(pf))
+#print(phi)
+## potenza apparente
+#S = 140000/math.sin(math.radians(phi))
+#print(S)
+## potenza attiva
+#P = S * math.cos(math.radians(phi))
+#print(P)
+## calcolo C
+#C = P*(math.tan(math.radians(phi))-math.tan(0))/(120*math.pi*220**2)
+#print(C)
+
+
+
