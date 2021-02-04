@@ -202,5 +202,30 @@ import math
 #C = P*(math.tan(math.radians(phi))-math.tan(0))/(120*math.pi*220**2)
 #print(C)
 
+#Problema 12.52
+#Ia = Zee(120,120)/Zee(20,60)
+#Ib = Zee(120,0)/Zee(30)
+#Ic = Zee(120,-120)/Zee(40,30)
+#print(f"Ia: {Ia}")
+#print(f"Ib: {Ib}")
+#print(f"Ic: {Ic}")
+#print(f"In = {-Ia-Ib-Ic}")
 
+#Problema 12.54
+Vp = Zee(210,0)
+Ia = Vp/Zee(80)
+Ib = Vp/Zee(60+90j)
+Ic = Vp/Zee(80j)
+print(f"Ia: {Ia}")
+print(f"Ib: {Ib}")
+print(f"Ic: {Ic}")
+print(f"In = {-Ia-Ib-Ic}")
+Sa = Vp*Ia.conjugate()
+print(f"Sa: {Sa}")
+Sb = Vp*Ib.conjugate()
+print(f"Sb: {Sb}")
+Sc = Vp*Ic.conjugate()
+print(f"Sc: {Sc}")
+S = Sa+Sb+Sc
+print(f"S: {S}")
 
