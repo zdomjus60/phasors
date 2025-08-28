@@ -1,157 +1,111 @@
 import math
 
 class Zee(object):
+    """A class to represent complex numbers and phasors."""
 
-    def __init__(self, *args):
-        if len(args) == 0:
-            self.x = 0; self.y = 0;
-            self.r = 0; self.phi = 0; self.z = (0,0)
-            
-        elif len(args) == 1:
-            if (isinstance(args[0], int)) or (isinstance(args[0], float)):
-                self.x = args[0].real; self.y = 0
-                self.r = args[0]; self.phi = 0; self.z = (self.r,0)
-                
-            if isinstance(args[0], complex):
-                self.x = args[0].real; self.y = args[0].imag
-                self.r = 0; self.phi = 0; self.z = (0,0)
-                self.to_polar()
-                
-        elif len(args) == 2:
-            self.x = 0; self.y = 0
-            self.r = args[0]; self.phi = args[1]
-            self.z = (self.r, self.phi)
-            self.to_rect()
-                
+    def __init__(self, x=0, y=0):
+        """Initializes a Zee object from rectangular coordinates."""
+        self.x = x
+        self.y = y
+        self.to_polar()
+
+    @classmethod
+    def from_polar(cls, r, phi):
+        """Creates a Zee object from polar coordinates."""
+        x = r * math.cos(math.radians(phi))
+        y = r * math.sin(math.radians(phi))
+        return cls(x, y)
+
+    @classmethod
+    def from_complex(cls, c):
+        """Creates a Zee object from a complex number."""
+        return cls(c.real, c.imag)
+
     def to_rect(self):
-        self.r = self.z[0]; self.phi = self.z[1]
+        """Updates rectangular coordinates from polar coordinates."""
         self.x = self.r * math.cos(math.radians(self.phi))      
         self.y = self.r * math.sin(math.radians(self.phi))
     
     def to_polar(self):
+        """Updates polar coordinates from rectangular coordinates."""
         self.r = math.sqrt(self.x*self.x + self.y*self.y) 
         self.phi = math.degrees(math.atan2(self.y, self.x))
-        self.z = (self.r, self.phi)
     
     def conjugate(self):
-        temp = Zee()
-        temp.phi = -self.phi
-        temp.r = self.r
-        temp.z = (temp.r, temp.phi)
-        temp.to_rect()
-        return temp
+        """Returns the conjugate of the complex number."""
+        return Zee(self.x, -self.y)
 
     @property
     def polar(self):
+        """Returns the polar representation (r, phi)."""
         return (self.r, self.phi)
-
-    @polar.setter
-    def polar(self, value):
-        if isinstance(value, tuple):
-            self.z=value
-            self.to_rect()
 
     @property
     def rect(self):
+        """Returns the rectangular representation (x, y)."""
         return (self.x, self.y)
 
-    @rect.setter
-    def rect(self, value):
-        if isinstance(value, complex):
-            self.x = value.real; self.y = value.imag
-            self.to_polar()
-            
     def __neg__(self):
-        temp = Zee()
-        temp.x = -self.x
-        temp.y = -self.y
-        temp.to_polar()
-        return temp
+        """Negates the complex number."""
+        return Zee(-self.x, -self.y)
 
     def __add__(self, other):
-        temp = Zee()
-        temp.x = self.x + other.x
-        temp.y = self.y + other.y
-        temp.to_polar()
-        return temp
+        """Adds two complex numbers."""
+        return Zee(self.x + other.x, self.y + other.y)
 
-    def __sub__ (self, other):
-        temp = Zee()
-        temp.x = self.x - other.x
-        temp.y = self.y - other.y
-        temp.to_polar()
-        return temp
+    def __sub__(self, other):
+        """Subtracts two complex numbers."""
+        return Zee(self.x - other.x, self.y - other.y)
     
-    def __mul__ (self, other):
-        temp = Zee()
-        temp.r = self.r * other.r
-        temp.phi = self.phi + other.phi
-        temp.z = (temp.r, temp.phi)
-        temp.to_rect()
-        return temp
+    def __mul__(self, other):
+        """Multiplies two complex numbers."""
+        r = self.r * other.r
+        phi = self.phi + other.phi
+        return Zee.from_polar(r, phi)
     
-    def __truediv__ (self, other):
-        temp = Zee()
-        temp.r = self.r / other.r
-        temp.phi = self.phi - other.phi
-        temp.z = (temp.r, temp.phi)
-        temp.to_rect()
-        return temp
+    def __truediv__(self, other):
+        """Divides two complex numbers."""
+        r = self.r / other.r
+        phi = self.phi - other.phi
+        return Zee.from_polar(r, phi)
 
     def __pow__(self, other):
-        a = (self.x+self.y*1j)**(other.x+other.y*1j)
-        temp = Zee(a)
-        temp.to_polar()
-        return temp
-    
-    def series(self, other):
-        temp = Zee()
-        temp.x = self.x + other.x 
-        temp.y = self.y + other.y
-        temp.to_polar()
-        return temp
+        """Raises a complex number to the power of another."""
+        c = (self.x+self.y*1j)**(other.x+other.y*1j)
+        return Zee.from_complex(c)
     
     def __floordiv__(self, other):
-        temp1 = Zee()
-        temp1.r = self.r * other.r 
-        temp1.phi = self.phi + other.phi
-        temp1.z = (temp1.r, temp1.phi)
-        temp1.to_rect()
-        
-        temp2 = Zee()
-        temp2.x = self.x + other.x
-        temp2.y = self.y + other.y
-        temp2.to_polar()
-        
-        temp = Zee()
-        temp.r = temp1.r / temp2.r
-        temp.phi = temp1.phi - temp2.phi
-        temp.z = (temp.r, temp.phi)
-        temp.to_rect()
-        return temp
+        """Calculates the parallel impedance."""
+        return (self * other) / (self + other)
 
     def __str__(self):
-        if (self.r < 0):
+        """Returns a string representation of the complex number."""
+        # Normalize phi to be in the range (-180, 180]
+        phi = self.phi
+        if self.r < 0:
             self.r *= -1
-            self.phi += 180.0
-        while self.phi > 360.0:
-            self.phi -= 360.0
-        while self.phi < -360.0:
-            self.phi += 360.0
-        self.x = float(self.x)
-        self.y = float(self.y)
-        self.r = float(self.r)
-        self.phi=float(self.phi)
-        return (f"x:{self.x:.5} y:{self.y:.5} r:{self.r:.5} phi:{self.phi:.5}")
+            phi += 180.0
+        while phi > 180.0:
+            phi -= 360.0
+        while phi <= -180.0:
+            phi += 360.0
+        return (f"x:{self.x:.5f} y:{self.y:.5f} | r:{self.r:.5f} ∠{phi:.2f}°")
 
         
 class Resistor(Zee):
+    """Represents a resistor in an AC circuit."""
     def __init__(self, res):
-        Zee.__init__(self)
+        """Initializes a Resistor object.
+
+        Args:
+            res (float): The resistance in Ohms.
+        """
+        super().__init__(res, 0)
         self.res = res
           
     @property
     def resistance(self):
+        """The resistance of the resistor in Ohms."""
         return self.res
     
     @resistance.setter
@@ -161,18 +115,31 @@ class Resistor(Zee):
                 self.res = value
     
     def impedance(self, pulse):
-        self.x = self.r = self.res
-        self.y = self.phi = 0
-        return(self)
+        """Calculates the impedance of the resistor.
+
+        Args:
+            pulse (float): The angular frequency in rad/s.
+
+        Returns:
+            Zee: The impedance of the resistor.
+        """
+        return Zee(self.res, 0)
 
 class Inductor(Zee):
+    """Represents an inductor in an AC circuit."""
     
     def __init__(self, ind):
-        Zee.__init__(self)
+        """Initializes an Inductor object.
+
+        Args:
+            ind (float): The inductance in Henrys.
+        """
+        super().__init__()
         self.ind = ind
         
     @property
     def inductance(self):
+        """The inductance of the inductor in Henrys."""
         return self.ind
     
     @inductance.setter
@@ -182,19 +149,31 @@ class Inductor(Zee):
                 self.ind = value
 
     def impedance(self, pulse):
-        self.x = 0
-        self.y = self.r = pulse * self.ind
-        self.phi = 90
-        return(self)
+        """Calculates the impedance of the inductor.
+
+        Args:
+            pulse (float): The angular frequency in rad/s.
+
+        Returns:
+            Zee: The impedance of the inductor.
+        """
+        return Zee(0, pulse * self.ind)
         
 class Capacitor(Zee):
+    """Represents a capacitor in an AC circuit."""
     
     def __init__(self, cap):
-        Zee.__init__(self)
+        """Initializes a Capacitor object.
+
+        Args:
+            cap (float): The capacitance in Farads.
+        """
+        super().__init__()
         self.cap = cap
         
     @property
     def capacitance(self):
+        """The capacitance of the capacitor in Farads."""
         return self.cap
     
     @capacitance.setter
@@ -204,31 +183,44 @@ class Capacitor(Zee):
                 self.cap = value
         
     def impedance(self, pulse):
-        self.x = 0
-        self.y = -1/pulse/self.cap
-        self.r = 1/pulse/self.cap
-        self.phi = -90
-        return(self)
+        """Calculates the impedance of the capacitor.
+
+        Args:
+            pulse (float): The angular frequency in rad/s.
+
+        Returns:
+            Zee: The impedance of the capacitor.
+        """
+        return Zee(0, -1/(pulse*self.cap))
 
 class VSource(Zee):
+    """Represents a voltage source in an AC circuit."""
     
     def __init__(self, voltage, frequency=50.0, phase=0):
-        Zee.__init__(self)
-        self.r = voltage
-        self.phi = phase
-        self.x = Zee(self.r, self.phi).x
-        self.y = Zee(self.r, self.phi).y
+        """Initializes a VSource object.
+
+        Args:
+            voltage (float): The voltage RMS value.
+            frequency (float, optional): The frequency in Hz. Defaults to 50.0.
+            phase (float, optional): The phase in degrees. Defaults to 0.
+        """
+        z = Zee.from_polar(voltage, phase)
+        super().__init__(z.x, z.y)
         self.frequency = frequency
         self.pulse = self.frequency*2*math.pi
     
 class ISource(Zee):
+    """Represents a current source in an AC circuit."""
     
     def __init__(self, current, frequency=50.0, phase=0):
-        Zee.__init__(self)
-        self.r = current
-        self.phi = phase
-        self.x = Zee(self.r, self.phi).x
-        self.y = Zee(self.r, self.phi).y
+        """Initializes an ISource object.
+
+        Args:
+            current (float): The current RMS value.
+            frequency (float, optional): The frequency in Hz. Defaults to 50.0.
+            phase (float, optional): The phase in degrees. Defaults to 0.
+        """
+        z = Zee.from_polar(current, phase)
+        super().__init__(z.x, z.y)
         self.frequency = frequency
         self.pulse = self.frequency*2*math.pi
- 
