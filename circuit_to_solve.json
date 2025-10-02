@@ -1,0 +1,48 @@
+
+[
+    {
+        "type": "ISource",
+        "value": {"current": 1, "phase": 0},
+        "nodes": [1, 0]
+    },
+    {
+        "type": "Inductor",
+        "value": 6,
+        "nodes": [1, 0]
+    },
+    {
+        "type": "Resistor",
+        "value": 2,
+        "nodes": [1, 2]
+    },
+    {
+        "type": "Inductor",
+        "value": 8,
+        "nodes": [2, 0]
+    },
+    {
+        "type": "Capacitor",
+        "value": 0.1666666667,
+        "nodes": [2, 3]
+    },
+    {
+        "type": "Inductor",
+        "value": 8,
+        "nodes": [3, 0]
+    },
+    {
+        "type": "Resistor",
+        "value": 4,
+        "nodes": [3, 4]
+    },
+    {
+        "type": "Inductor",
+        "value": 12,
+        "nodes": [4, 0]
+    },
+    {
+        "type": "Capacitor",
+        "value": 0.25,
+        "nodes": [1, 4]
+    }
+]

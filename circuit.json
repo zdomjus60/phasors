@@ -1,0 +1,22 @@
+[
+    {
+        "type": "VSource",
+        "value": {"voltage": 50, "frequency": 1.5915494309189535, "phase": 30},
+        "nodes": [0, 1]
+    },
+    {
+        "type": "Inductor",
+        "value": 0.5,
+        "nodes": [1, 2]
+    },
+    {
+        "type": "Resistor",
+        "value": 10,
+        "nodes": [1, 2]
+    },
+    {
+        "type": "Capacitor",
+        "value": 0.05,
+        "nodes": [2, 0]
+    }
+]

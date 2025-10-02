@@ -1,2 +1,4 @@
 # This project uses only built-in Python modules.
 # Python 3.8+
+numpy
+schemdraw
